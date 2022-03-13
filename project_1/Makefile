@@ -4,5 +4,8 @@
 # parallel_quicksort: parallel_quicksort.c
 # 	gcc-11  parallel_quicksort.c -o parallel_quicksort -lm -fopenmp -Wall
 
-prefix: prefix.c
-	gcc-11  prefix.c -o prefix -lm -fopenmp -Wall
+# prefix: prefix.c
+# 	gcc-11  prefix.c -o prefix -lm -fopenmp -Wall
+
+radixsort: radixsort.c
+	gcc-11  radixsort.c -o radixsort -lm -fopenmp -Wall
