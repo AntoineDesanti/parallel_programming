@@ -52,3 +52,4 @@ Mkfile.old
 dkms.conf
 project_1/prefix
 project_1/radixsort
+project_1/output/radixsort
