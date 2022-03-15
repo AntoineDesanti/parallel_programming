@@ -45,6 +45,26 @@ int *genTabWithRandoms(int n)
 	return tmp;
 }
 
+long tobinary(int dno){
+	//https://www.tutorialspoint.com/decimal-to-binary-conversion-using-c-programming
+   long bno=0,rem,f=1;
+   while(dno != 0){
+      rem = dno % 2;
+      bno = bno + rem * f;
+      f = f * 10;
+      dno = dno / 2;
+   }
+   return bno;;
+}
+
+int countDigitsToWriteValue(int value){
+	return log_2(value) + 1;
+}
+
+int log_2(int val){
+	return log(val)/log(2);
+}
+
 // Based on https://cboard.cprogramming.com/c-programming/137188-obtain-space-separated-values-text-file.html
 int *genTabFromFile(char *filename, int array_size)
 {

@@ -11,7 +11,8 @@ int *genTabWithRandoms(int n);
 int *genTabFromFile(char *filename, int array_size);
 int randomNumber(int lower, int upper);
 bool isNumber(char number[]);
-
-
+long tobinary(int dno);
+int countDigitsToWriteValue(int value);
+int log_2(int val);
 
 #endif
