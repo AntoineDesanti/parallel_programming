@@ -8,11 +8,7 @@
 #include <ctype.h>
 #include "radixsort.h"
 
-struct tablo
-{
-	int *tab;
-	int size;
-};
+
 
 int main(int argc, char **argv)
 {
