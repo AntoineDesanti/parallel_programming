@@ -12,7 +12,6 @@ struct tablo
 	int *tab;
 	int size;
 };
-
 void printArray(struct tablo *tmp)
 {
 	printf("---- Array of size %i ---- \n", tmp->size);
@@ -58,11 +57,28 @@ long tobinary(int dno){
 }
 
 int countDigitsToWriteValue(int value){
-	return log_2(value) + 1;
+	return log2(value) + 1;
 }
 
-int log_2(int val){
-	return log(val)/log(2);
+bool bit_status(int val, int position){
+	return (val >> position) & 1;
+}
+
+int* bit(int i, struct tablo *tab_a){
+	// Given a tab, will return in an array for each value of A if the i'th bit of the value is 0 or 1
+	struct tablo *tmp = malloc(sizeof(struct tablo));
+	tmp->size = tab_a->size;
+	tmp->tab = malloc(tab_a->size * sizeof(int));
+
+	for(int j=0; j < tmp->size - 1; j++){
+		if(bit_status(tab_a->tab[j],i)){
+			tmp->tab[j]=1;
+		}
+		else{
+			tmp->tab[j]=0;
+		}
+	}
+	return tmp;
 }
 
 // Based on https://cboard.cprogramming.com/c-programming/137188-obtain-space-separated-values-text-file.html

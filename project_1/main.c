@@ -9,7 +9,11 @@
 #include "radixsort.h"
 
 
-
+struct tablo
+{
+	int *tab;
+	int size;
+};
 int main(int argc, char **argv)
 {
 	if (argc < 4)
@@ -52,6 +56,7 @@ int main(int argc, char **argv)
 	// END PARAMS SETUP
 
 	struct tablo *tab;
+
 	if (inputFileUsed)
 	{
 		tab = genTabFromFile(input_file_name, array_size);
@@ -62,4 +67,12 @@ int main(int argc, char **argv)
 	}
 
 	printArray(tab);
+
+	struct tablo *tab2 = bit(0, tab);
+
+	printf("Flag tab: ");
+	printArray(tab2);
+
+	free(tab);
+	free(tab2);
 }

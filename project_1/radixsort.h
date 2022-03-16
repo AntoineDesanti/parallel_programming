@@ -13,6 +13,6 @@ int randomNumber(int lower, int upper);
 bool isNumber(char number[]);
 long tobinary(int dno);
 int countDigitsToWriteValue(int value);
-int log_2(int val);
+bool bit_status(int val, int position);
 
 #endif
