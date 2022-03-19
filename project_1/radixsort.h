@@ -14,5 +14,7 @@ bool isNumber(char number[]);
 long tobinary(int dno);
 int countDigitsToWriteValue(int value);
 bool bit_status(int val, int position);
-
+int* split(struct tablo *tab_a,struct tablo *flags);
+int* scan(struct tablo *array);
+int *radix_sort(struct tablo *input_tab, int N);
 #endif

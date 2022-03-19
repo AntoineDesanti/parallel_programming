@@ -2,6 +2,6 @@
     "files.associations": {
         "string.h": "c",
         "random": "c",
-        "ratio": "c"
+        "time.h": "c"
     }
 }

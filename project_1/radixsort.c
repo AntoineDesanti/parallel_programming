@@ -7,12 +7,13 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-struct tablo
+typedef struct tablo
 {
 	int *tab;
 	int size;
-};
-void printArray(struct tablo *tmp)
+} tablo;
+
+void printArray(tablo *tmp)
 {
 	printf("---- Array of size %i ---- \n", tmp->size);
 	int size = tmp->size;
@@ -24,15 +25,15 @@ void printArray(struct tablo *tmp)
 	printf("\n");
 }
 
-int *descente(struct tablo *input)
-{
-}
 
-void final(struct tablo *a, struct tablo *b)
+int randomNumber(int lower, int upper)
 {
+	int num = (rand() %
+			   (upper - lower + 1)) +
+			  lower;
+	return num;
 }
-
-int *genTabWithRandoms(int n)
+tablo *genTabWithRandoms(int n)
 {
 	struct tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size = n;
@@ -64,7 +65,7 @@ bool bit_status(int val, int position){
 	return (val >> position) & 1;
 }
 
-int* bit(int i, struct tablo *tab_a){
+struct tablo *bit(int i, struct tablo *tab_a){
 	// Given a tab, will return in an array for each value of A if the i'th bit of the value is 0 or 1
 	struct tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size = tab_a->size;
@@ -81,14 +82,88 @@ int* bit(int i, struct tablo *tab_a){
 	return tmp;
 }
 
+struct tablo *scan(struct tablo *tab){
+	struct tablo *tmp = malloc(sizeof(struct tablo));
+	tmp->size = tab->size;
+	tmp->tab = malloc(tab->size * sizeof(int));
+	int previous = 0;
+	for(int i=0; i < tab->size; i++){
+		tmp->tab[i] = previous;
+		previous += tab->tab[i];
+	}
+	return tab;
+}
+
+struct tablo *suffix(struct tablo *tab){
+	struct tablo *tmp = malloc(sizeof(struct tablo));
+	tmp->size = tab->size;
+	tmp->tab = malloc(tab->size * sizeof(int));
+
+	int result = 0;
+	for(int i = 0 ; i < tab->size -1; i--){
+		if(tab->tab[i] == 1){
+			tmp->tab[i] = result++;
+		}
+		else{
+			tmp->tab[i] = result;
+		}
+	}
+
+	return tmp;
+}
+
+struct tablo *not(struct tablo *tab){
+	struct tablo *tmp = malloc(sizeof(struct tablo));
+	tmp->size = tab->size;
+	tmp->tab = malloc(tab->size * sizeof(int));
+	for(int i=0; i < tab->size; i++){
+		tmp->tab[i] = 1 - tab->tab[i];
+	}
+	return tmp;
+}
+
+struct tablo *index_rs(struct tablo *bit, struct tablo *ldown, struct tablo *lup) {
+    struct tablo *tmp = malloc(sizeof(struct tablo));
+	tmp->size = bit->size;
+	tmp->tab = malloc(bit->size * sizeof(int));
+    for (int i = 0; i < bit->size; ++i)
+        tmp->tab[i] = (bit->tab[i]) ? lup->tab[i] : ldown->tab[i];
+    return tmp;
+
+}
+
+tablo *permute(tablo *tab, tablo *index) {
+    tablo *permute = malloc(sizeof(tablo));
+	permute->size = tab->size;
+	permute->tab = malloc(tab->size * sizeof(int));
+    for (int i = 0; i < tab->size; ++i)
+        permute->tab[index->tab[i]] = tab->tab[i];
+    return permute;
+
+}
+
+tablo *split(tablo *tab_a,tablo *flags){
+	tablo *ldown = scan(not(flags));
+	tablo *lup = suffix(flags); 
+	return permute(tab_a, index_rs(flags,ldown,lup));
+}
+
+void radix_sort(tablo **input_tab, int N){
+	printf("N = %d", N);
+
+	for(int i = 0; i <= (int) log2(N); i++){
+		printf("i = %d", i);
+		*input_tab = split(*input_tab, bit(i, *input_tab));
+	}
+}
+
 // Based on https://cboard.cprogramming.com/c-programming/137188-obtain-space-separated-values-text-file.html
-int *genTabFromFile(char *filename, int array_size)
+tablo *genTabFromFile(char *filename, int array_size)
 {
-	char entire_row1[7];
     int value;
     int  i=0, r;
 
-	struct tablo *tmp = malloc(sizeof(struct tablo));
+	tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size = array_size;
 	tmp->tab = malloc(array_size * sizeof(int));
 
@@ -113,13 +188,7 @@ int *genTabFromFile(char *filename, int array_size)
 	return tmp;
 }
 
-int randomNumber(int lower, int upper)
-{
-	int num = (rand() %
-			   (upper - lower + 1)) +
-			  lower;
-	return num;
-}
+
 
 bool isNumber(char number[])
 {

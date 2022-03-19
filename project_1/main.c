@@ -9,11 +9,13 @@
 #include "radixsort.h"
 
 
-struct tablo
+typedef struct tablo
 {
 	int *tab;
 	int size;
-};
+} tablo;
+
+// ./output/radixsort 1021 10 myInput myfile 2
 int main(int argc, char **argv)
 {
 	if (argc < 4)
@@ -68,11 +70,15 @@ int main(int argc, char **argv)
 
 	printArray(tab);
 
-	struct tablo *tab2 = bit(0, tab);
+	//struct tablo *tab2;
 
-	printf("Flag tab: ");
-	printArray(tab2);
+	// for(int i=0; i=countDigitsToWriteValue(n_value) -1; i++){
+	// 	tab2 = split(tab2, bit(i, tab2));
+	// }
+
+	radix_sort(&tab,n_value);
+
+	printArray(tab);
 
 	free(tab);
-	free(tab2);
 }
