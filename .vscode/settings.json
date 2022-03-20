@@ -2,6 +2,25 @@
     "files.associations": {
         "string.h": "c",
         "random": "c",
-        "time.h": "c"
+        "time.h": "c",
+        "complex": "c",
+        "istream": "c",
+        "ostream": "c",
+        "chrono": "c",
+        "__bits": "c",
+        "__config": "c",
+        "bit": "c",
+        "bitset": "c",
+        "typeinfo": "c",
+        "utility": "c",
+        "version": "c",
+        "cwchar": "c",
+        "memory_resource": "c",
+        "limits": "c",
+        "ratio": "c",
+        "stop_token": "c",
+        "functional": "c",
+        "__tuple": "c",
+        "ios": "c"
     }
 }

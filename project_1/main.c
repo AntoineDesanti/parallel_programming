@@ -57,7 +57,7 @@ int main(int argc, char **argv)
 	}
 	// END PARAMS SETUP
 
-	struct tablo *tab;
+	tablo *tab;
 
 	if (inputFileUsed)
 	{
@@ -70,13 +70,10 @@ int main(int argc, char **argv)
 
 	printArray(tab);
 
-	//struct tablo *tab2;
-
-	// for(int i=0; i=countDigitsToWriteValue(n_value) -1; i++){
-	// 	tab2 = split(tab2, bit(i, tab2));
-	// }
-
 	radix_sort(&tab,n_value);
+
+	//tab = permute(tab, index_rs(bit(3,tab), scan(not(bit(3,tab))),suffix(bit(3, tab))) );	
+
 
 	printArray(tab);
 

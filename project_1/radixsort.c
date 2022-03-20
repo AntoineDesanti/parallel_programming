@@ -65,11 +65,11 @@ bool bit_status(int val, int position){
 	return (val >> position) & 1;
 }
 
-struct tablo *bit(int i, struct tablo *tab_a){
+tablo *bit(int i,tablo *tab_a){
 	// Given a tab, will return in an array for each value of A if the i'th bit of the value is 0 or 1
-	struct tablo *tmp = malloc(sizeof(struct tablo));
+	tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size = tab_a->size;
-	tmp->tab = malloc(tab_a->size * sizeof(int));
+	tmp->tab = malloc(tmp->size * sizeof(int));
 
 	for(int j=0; j < tmp->size - 1; j++){
 		if(bit_status(tab_a->tab[j],i)){
@@ -86,58 +86,71 @@ struct tablo *scan(struct tablo *tab){
 	struct tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size = tab->size;
 	tmp->tab = malloc(tab->size * sizeof(int));
+
 	int previous = 0;
-	for(int i=0; i < tab->size; i++){
+	for(int i=0; i < tmp->size; i++){
 		tmp->tab[i] = previous;
 		previous += tab->tab[i];
 	}
-	return tab;
+	return tmp;
 }
 
-struct tablo *suffix(struct tablo *tab){
-	struct tablo *tmp = malloc(sizeof(struct tablo));
+tablo *suffix(tablo *tab){
+	//size - suffix
+	tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size = tab->size;
 	tmp->tab = malloc(tab->size * sizeof(int));
 
 	int result = 0;
-	for(int i = 0 ; i < tab->size -1; i--){
+	for(int i = tmp->size - 1; i >= 0; i--){
 		if(tab->tab[i] == 1){
-			tmp->tab[i] = result++;
+			tmp->tab[i] = ++result;
 		}
 		else{
 			tmp->tab[i] = result;
 		}
 	}
 
+	for(int i = 0; i < tmp->size; i++){
+		 tmp->tab[i] = tab->size - tmp->tab[i];
+	}
+
 	return tmp;
 }
 
-struct tablo *not(struct tablo *tab){
-	struct tablo *tmp = malloc(sizeof(struct tablo));
+tablo *not(tablo *tab){
+	tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size = tab->size;
 	tmp->tab = malloc(tab->size * sizeof(int));
-	for(int i=0; i < tab->size; i++){
+	for(int i=0; i < tmp->size; i++){
 		tmp->tab[i] = 1 - tab->tab[i];
 	}
 	return tmp;
 }
 
-struct tablo *index_rs(struct tablo *bit, struct tablo *ldown, struct tablo *lup) {
-    struct tablo *tmp = malloc(sizeof(struct tablo));
+ tablo *index_rs(tablo *bit, tablo *ldown, struct tablo *lup) {
+    tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size = bit->size;
 	tmp->tab = malloc(bit->size * sizeof(int));
-    for (int i = 0; i < bit->size; ++i)
-        tmp->tab[i] = (bit->tab[i]) ? lup->tab[i] : ldown->tab[i];
-    return tmp;
+    for (int i = 0; i < bit->size; ++i){
+		if(bit->tab[i]){
+			tmp->tab[i] = lup->tab[i];
+		}
+		else{
+			tmp->tab[i] = ldown->tab[i];
+		}
+	}
 
+    return tmp;
 }
 
 tablo *permute(tablo *tab, tablo *index) {
     tablo *permute = malloc(sizeof(tablo));
 	permute->size = tab->size;
 	permute->tab = malloc(tab->size * sizeof(int));
-    for (int i = 0; i < tab->size; ++i)
+    for (int i = 0; i < permute->size; ++i){
         permute->tab[index->tab[i]] = tab->tab[i];
+	}
     return permute;
 
 }
@@ -145,14 +158,13 @@ tablo *permute(tablo *tab, tablo *index) {
 tablo *split(tablo *tab_a,tablo *flags){
 	tablo *ldown = scan(not(flags));
 	tablo *lup = suffix(flags); 
+
 	return permute(tab_a, index_rs(flags,ldown,lup));
 }
 
 void radix_sort(tablo **input_tab, int N){
-	printf("N = %d", N);
 
-	for(int i = 0; i <= (int) log2(N); i++){
-		printf("i = %d", i);
+	for(int i = 0; i <= (int) log2(N); ++i){
 		*input_tab = split(*input_tab, bit(i, *input_tab));
 	}
 }
