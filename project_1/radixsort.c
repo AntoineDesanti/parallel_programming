@@ -71,7 +71,7 @@ tablo *bit(int i,tablo *tab_a){
 	tmp->size = tab_a->size;
 	tmp->tab = malloc(tmp->size * sizeof(int));
 
-	for(int j=0; j < tmp->size - 1; j++){
+	for(int j=0; j < tmp->size; j++){
 		if(bit_status(tab_a->tab[j],i)){
 			tmp->tab[j]=1;
 		}
