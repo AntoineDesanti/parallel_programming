@@ -8,4 +8,5 @@
 # 	gcc-11  prefix.c -o prefix -lm -fopenmp -Wall
 
 radixsort: main.c
-	gcc-11  main.c radixsort.c -o ./output/radixsort -lm -fopenmp -Wall
+	gcc-11 -g main.c radixsort.c prefix.c -o ./output/radixsort -lm -fopenmp -Wall
+	

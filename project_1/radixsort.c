@@ -6,12 +6,8 @@
 #include <math.h>
 #include <stdbool.h>
 #include <ctype.h>
-
-typedef struct tablo
-{
-	int *tab;
-	int size;
-} tablo;
+#include "prefix.h"
+#include "suffix.h"
 
 void printArray(tablo *tmp)
 {
@@ -95,12 +91,26 @@ struct tablo *scan(struct tablo *tab){
 	return tmp;
 }
 
+struct tablo *scan_old(struct tablo *tab){
+	struct tablo *tmp = malloc(sizeof(struct tablo));
+	tmp->size = tab->size;
+	tmp->tab = malloc(tab->size * sizeof(int));
+
+	int previous = 0;
+	for(int i=0; i < tmp->size; i++){
+		tmp->tab[i] = previous;
+		previous += tab->tab[i];
+	}
+	return tmp;
+}
+
 tablo *suffix(tablo *tab){
-	//size - suffix
+
 	tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size = tab->size;
 	tmp->tab = malloc(tab->size * sizeof(int));
 
+	//suffix
 	int result = 0;
 	for(int i = tmp->size - 1; i >= 0; i--){
 		if(tab->tab[i] == 1){
@@ -110,7 +120,24 @@ tablo *suffix(tablo *tab){
 			tmp->tab[i] = result;
 		}
 	}
+	//size - suffix
+	for(int i = 0; i < tmp->size; i++){
+		 tmp->tab[i] = tab->size - tmp->tab[i];
+	}
 
+	return tmp;
+}
+
+tablo *suffix2(tablo *tab){
+
+	tablo *tmp = malloc(sizeof(struct tablo));
+	tmp->size = tab->size;
+	tmp->tab = malloc(tab->size * sizeof(int));
+
+	//suffix
+	//tmp = generateTreeFromTab(tab->tab, tab->size);
+	
+	//size - suffix
 	for(int i = 0; i < tmp->size; i++){
 		 tmp->tab[i] = tab->size - tmp->tab[i];
 	}

@@ -7,13 +7,8 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include "radixsort.h"
+#include "prefix.h"
 
-
-typedef struct tablo
-{
-	int *tab;
-	int size;
-} tablo;
 
 // ./output/radixsort 1021 10 myInput myfile 2
 int main(int argc, char **argv)
@@ -68,14 +63,24 @@ int main(int argc, char **argv)
 		tab = genTabWithRandoms(array_size);
 	}
 
-	printArray(tab);
+	 printArray(tab);
+	 radix_sort(&tab,n_value);
+	 printArray(tab);
 
-	radix_sort(&tab,n_value);
+//	tablo* prefix_tab= malloc(sizeof(struct tablo));
+//	prefix_tab->size = 4;
+//	prefix_tab->tab = malloc(prefix_tab->size * sizeof(int));
+//
+//	prefix_tab->tab[0] = 2;
+//	prefix_tab->tab[1] = 5;
+//	prefix_tab->tab[2] = 8;
+//	prefix_tab->tab[3] = 1;
+//
+//
+//    tablo *pref_tab = prefix(prefix_tab);
+//    printArray(pref_tab);
+//
+//
 
-	//tab = permute(tab, index_rs(bit(3,tab), scan(not(bit(3,tab))),suffix(bit(3, tab))) );	
-
-
-	printArray(tab);
-
-	free(tab);
+    free(tab);
 }

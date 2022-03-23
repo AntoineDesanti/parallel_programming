@@ -3,7 +3,6 @@
 
 
 void printArray(struct tablo *tmp);
-int *descente(struct tablo *input);
 struct tablo *permute(struct tablo *tab_a,struct tablo *index);
 int* bit(int i, struct tablo *tab_a);
 struct tablo *not(struct tablo *tab);
