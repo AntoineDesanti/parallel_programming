@@ -18,6 +18,6 @@ bool bit_status(int val, int position);
 int* split(struct tablo *tab_a,struct tablo *flags);
 int* scan(struct tablo *array);
 struct tablo *index_rs(struct tablo *bit,struct tablo *ldown, struct tablo *lup);
-
+struct tablo *scan_old(struct tablo *tab);
 int *radix_sort(struct tablo **input_tab, int N);
 #endif

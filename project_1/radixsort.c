@@ -78,16 +78,12 @@ tablo *bit(int i,tablo *tab_a){
 	return tmp;
 }
 
-struct tablo *scan(struct tablo *tab){
-	struct tablo *tmp = malloc(sizeof(struct tablo));
-	tmp->size = tab->size;
-	tmp->tab = malloc(tab->size * sizeof(int));
-
-	int previous = 0;
-	for(int i=0; i < tmp->size; i++){
-		tmp->tab[i] = previous;
-		previous += tab->tab[i];
-	}
+struct tablo * scan(struct tablo *tab){
+	struct tablo *tmp = prefix(tab);
+	//todo: make sure the tmp size is even
+	tmp->tab = tmp->tab + ((tmp->size / 2));
+	tmp->tab[0] = 0;
+	tmp->size = tmp->size /2;
 	return tmp;
 }
 

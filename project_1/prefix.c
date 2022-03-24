@@ -56,12 +56,12 @@ struct tablo* descente(struct tablo *input){
 
 			if(j % 2 == 0){
 				//fils gauche
-				val_pere = tmp->tab[j/2];
-				tmp->tab[j] = val_pere + input->tab[j+1];
+				tmp->tab[j] = tmp->tab[j/2];
 			}
 			else{
 				//fils droit
-				tmp->tab[j] = val_pere;
+				
+				tmp->tab[j] = tmp->tab[j/2] + input->tab[j-1];
 			}
 		}
 	}

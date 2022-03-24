@@ -9,6 +9,7 @@ struct tablo {
     int * tab;
     int size;
 };
+typedef struct tablo tablo;
 
 void printArray(struct tablo *tmp) {
     printf("---- Array of size %i ---- \n", tmp->size);
@@ -21,26 +22,28 @@ void printArray(struct tablo *tmp) {
 }
 
 //Montée
-int* generateTreeFromTab(int input[], int size){
+struct tablo* generateTreeFromTab(int input[], int size){
   struct tablo *tmp = malloc(sizeof(struct tablo));
   tmp->size = size * 2;
   tmp->tab = malloc(tmp->size * sizeof(int));
 
-	for(int i =  size * 2; i > size -1; i--){	
-		tmp->tab[i] = input[i-size];
+	//#pragma omp parallel for
+    for (int i = 0; i < size; i++) {
+        tmp->tab[i + size] = input[i];
 	}
 
-	int j = size * 2 - 1;
-	#pragma omp parallel for
-	for(int i =  size-1; i > 0; i--){	
-		tmp->tab[i] = tmp->tab[j] + tmp->tab[j-1];
-		j-=2;
+    for (int i = (int) log2(size) - 1; i >= 0; i--) {
+        int index = pow(2, i);
+        int index2 = pow(2, i + 1) - 1;
+	//#pragma omp parallel for
+        for (int j = index; j <= index2; j++) {
+            tmp->tab[j] = tmp->tab[2 * j] + tmp->tab[2 * j + 1];
 	}
-
+    }
 	return tmp;
 } 
 
-int* descente(struct tablo *input){
+struct tablo* descente(struct tablo *input){
 	struct tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size =  input->size;
 	tmp->tab = malloc(input->size * sizeof(int));
@@ -68,23 +71,42 @@ int* descente(struct tablo *input){
 	return tmp;
 }
 
-void final(struct tablo *a, struct tablo *b) {
+struct tablo *final(struct tablo *a, struct tablo *b) {
     for (int i = 1; i <= a->size; i++) {
         b->tab[i] = b->tab[i] + a->tab[i];
     }
+	return b;
+}
+
+struct tablo * prefix(struct tablo *a){
+	struct tablo *tmp = malloc(sizeof(struct tablo));
+	tmp->size =  a->size;
+	tmp->tab = malloc(a->size * sizeof(int));
+
+	tmp = descente(a);
+	tmp = final(a,tmp);
+
+	return tmp;
+}
+
+void free_tablo(tablo *t)
+{
+    free(t->tab);
+    free(t);
 }
 
 int main(int argc, char **argv) {
-	int input_tab[] = { 2,4,5,8};	
+	int input_tab[] = { 2, 5, 8, 1};
 	struct tablo *tree_tab  = generateTreeFromTab(input_tab, 4);
 	printArray(tree_tab);
+
 	struct tablo *tree_tab_descente = descente(tree_tab);
-	printArray(tree_tab);
-	final(tree_tab,tree_tab_descente);
 	printArray(tree_tab_descente);
-
-	
-
-
+    for(u_int8_t i = 0; i < 8; i++)
+    {
+        tree_tab_descente->tab[i] = tree_tab_descente->tab[i] + tree_tab->tab[i];
 }
-
+    printArray(tree_tab_descente);
+    free_tablo(tree_tab);
+    free_tablo(tree_tab_descente);
+}
