@@ -96,20 +96,19 @@ int main(int argc, char **argv)
 	fclose(fp);
 
 
-//	tablo* prefix_tab= malloc(sizeof(struct tablo));
-//	prefix_tab->size = 4;
-//	prefix_tab->tab = malloc(prefix_tab->size * sizeof(int));
-//
-//	prefix_tab->tab[0] = 2;
-//	prefix_tab->tab[1] = 5;
-//	prefix_tab->tab[2] = 8;
-//	prefix_tab->tab[3] = 1;
-//
-//
-//    tablo *pref_tab = prefix(prefix_tab);
-//    printArray(pref_tab);
-//
-//
+
+
+	// tablo* prefix_tab= malloc(sizeof(struct tablo));
+	// prefix_tab->size = 4;
+	// prefix_tab->tab = malloc(prefix_tab->size * sizeof(int));
+
+	// prefix_tab->tab[0] = 2;
+	// prefix_tab->tab[1] = 4;
+	// prefix_tab->tab[2] = 5;
+	// prefix_tab->tab[3] = 8;
+
+	// tablo *pref_tab3 = size_suffix(prefix_tab);
+  	// printArray(pref_tab3);
 
     free(tab_to_sort);
 	return 0;

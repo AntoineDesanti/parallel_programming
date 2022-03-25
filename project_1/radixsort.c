@@ -51,18 +51,6 @@ tablo *genTabWithRandoms(int n)
 	return tmp;
 }
 
-long tobinary(int dno){
-	//https://www.tutorialspoint.com/decimal-to-binary-conversion-using-c-programming
-   long bno=0,rem,f=1;
-   while(dno != 0){
-      rem = dno % 2;
-      bno = bno + rem * f;
-      f = f * 10;
-      dno = dno / 2;
-   }
-   return bno;;
-}
-
 int countDigitsToWriteValue(int value){
 	return log2(value) + 1;
 }
@@ -139,7 +127,7 @@ tablo *size_suffix(tablo *tab){
 	tmp->tab = tmp->tab + ((tmp->size / 2));
 	tmp->tab[0] = 0;
 	tmp->size = tmp->size /2;
-	
+
 	for(int i = 0; i < tmp->size; i++){
 		 tmp->tab[i] = tab->size - tmp->tab[i];
 	}

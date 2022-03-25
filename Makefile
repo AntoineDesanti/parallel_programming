@@ -1,2 +1,2 @@
-prefix: prefixV2.c
-	gcc-11  prefixV2.c -o prefixv2 -lm -fopenmp -Wall
+prefix: prefix.c
+	gcc-11  prefix.c -o prefix -lm -fopenmp -Wall

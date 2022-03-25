@@ -21,6 +21,18 @@
         "stop_token": "c",
         "functional": "c",
         "__tuple": "c",
-        "ios": "c"
+        "ios": "c",
+        "algorithm": "c",
+        "locale": "c",
+        "numeric": "c",
+        "__hash_table": "c",
+        "__split_buffer": "c",
+        "array": "c",
+        "deque": "c",
+        "initializer_list": "c",
+        "queue": "c",
+        "unordered_map": "c",
+        "vector": "c",
+        "string_view": "c"
     }
 }
