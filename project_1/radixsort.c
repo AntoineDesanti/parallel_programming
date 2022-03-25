@@ -20,7 +20,16 @@ void printArray(tablo *tmp)
 	}
 	printf("\n");
 }
+struct tablo *reverse_tablo(struct tablo *tab){
+	struct tablo *tmp = malloc(sizeof(struct tablo));
+	tmp->size = tab->size;
+	tmp->tab = malloc(tab->size * sizeof(int));
 
+	for(int i = 0; i < tmp->size; i++){
+		tmp->tab[i] = tab->tab[tmp->size - i - 1];
+	}
+	return tmp;
+}
 
 int randomNumber(int lower, int upper)
 {
@@ -29,6 +38,7 @@ int randomNumber(int lower, int upper)
 			  lower;
 	return num;
 }
+
 tablo *genTabWithRandoms(int n)
 {
 	struct tablo *tmp = malloc(sizeof(struct tablo));
@@ -82,7 +92,7 @@ struct tablo * scan(struct tablo *tab){
 	struct tablo *tmp = prefix(tab);
 	//todo: make sure the tmp size is even
 	tmp->tab = tmp->tab + ((tmp->size / 2));
-	tmp->tab[0] = 0;
+	// tmp->tab[0] = 0;
 	tmp->size = tmp->size /2;
 	return tmp;
 }
@@ -100,7 +110,7 @@ struct tablo *scan_old(struct tablo *tab){
 	return tmp;
 }
 
-tablo *suffix(tablo *tab){
+tablo *suffix_old(tablo *tab){
 
 	tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size = tab->size;
@@ -124,22 +134,19 @@ tablo *suffix(tablo *tab){
 	return tmp;
 }
 
-tablo *suffix2(tablo *tab){
-
-	tablo *tmp = malloc(sizeof(struct tablo));
-	tmp->size = tab->size;
-	tmp->tab = malloc(tab->size * sizeof(int));
-
-	//suffix
-	//tmp = generateTreeFromTab(tab->tab, tab->size);
+tablo *size_suffix(tablo *tab){
+	struct tablo *tmp = suffix(tab);
+	tmp->tab = tmp->tab + ((tmp->size / 2));
+	tmp->tab[0] = 0;
+	tmp->size = tmp->size /2;
 	
-	//size - suffix
 	for(int i = 0; i < tmp->size; i++){
 		 tmp->tab[i] = tab->size - tmp->tab[i];
 	}
 
 	return tmp;
 }
+
 
 tablo *not(tablo *tab){
 	tablo *tmp = malloc(sizeof(struct tablo));
@@ -155,6 +162,8 @@ tablo *not(tablo *tab){
     tablo *tmp = malloc(sizeof(struct tablo));
 	tmp->size = bit->size;
 	tmp->tab = malloc(bit->size * sizeof(int));
+
+	//#pragma omp parallel for
     for (int i = 0; i < bit->size; ++i){
 		if(bit->tab[i]){
 			tmp->tab[i] = lup->tab[i];
@@ -163,7 +172,6 @@ tablo *not(tablo *tab){
 			tmp->tab[i] = ldown->tab[i];
 		}
 	}
-
     return tmp;
 }
 
@@ -180,13 +188,12 @@ tablo *permute(tablo *tab, tablo *index) {
 
 tablo *split(tablo *tab_a,tablo *flags){
 	tablo *ldown = scan(not(flags));
-	tablo *lup = suffix(flags); 
+	tablo *lup = suffix_old(flags);
 
 	return permute(tab_a, index_rs(flags,ldown,lup));
 }
 
 void radix_sort(tablo **input_tab, int N){
-
 	for(int i = 0; i <= (int) log2(N); ++i){
 		*input_tab = split(*input_tab, bit(i, *input_tab));
 	}
@@ -240,5 +247,3 @@ bool isNumber(char number[])
 	}
 	return true;
 }
-
-
