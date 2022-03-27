@@ -77,12 +77,16 @@ tablo *bit(int i,tablo *tab_a){
 }
 
 struct tablo * scan(struct tablo *tab){
-	struct tablo *tmp = prefix(tab);
-	//todo: make sure the tmp size is even
-	tmp->tab = tmp->tab + ((tmp->size / 2));
-	// tmp->tab[0] = 0;
-	tmp->size = tmp->size /2;
-	return tmp;
+	struct tablo *tmp = prefix_parallel(tab);
+	struct tablo *shift = malloc(sizeof(struct tablo));
+	shift->size = tab->size;
+	shift->tab = malloc(tab->size * sizeof(int));
+	//shift tmp one to the right
+	for (int i=1; i<tmp->size; i++){
+		shift->tab[i] = tmp->tab[i-1];
+	}
+	shift->tab[0] = 0;
+	return shift;
 }
 
 struct tablo *scan_old(struct tablo *tab){
