@@ -1,2 +1,2 @@
-N=1021 Size=8 Threads=5 Time_in_microsec=2212
-0 2 5 9 9 23 512 1021 
+N=1021 Size=10 Threads=5 Time_in_microsec=10300
+0 1 2 2 3 4 5 6 7 7 

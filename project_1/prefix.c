@@ -77,7 +77,7 @@ static struct tablo* descente(struct tablo *input){
 
 void final(struct tablo *tree_tab_descente, struct tablo *tree_tab) {
 	 #pragma omp parallel for
-	for(u_int8_t i = 0; i < tree_tab_descente->size; i++)
+	for(int i = 0; i < tree_tab_descente->size; i++)
     {
         tree_tab_descente->tab[i] = tree_tab_descente->tab[i] + tree_tab->tab[i];
     }
@@ -140,9 +140,7 @@ struct tablo *merge(struct tablo *tab1, struct tablo *tab2){
 }
 struct tablo * prefix_parallel(struct tablo *a){
     struct tablo *result = malloc(sizeof(struct tablo));
-    result->size = a->size;
-    result->tab = malloc(result->size * sizeof(int));
-
+  
     int k[10];
     int array_indice = 0;
     int k_indice = 0;
@@ -152,13 +150,17 @@ struct tablo * prefix_parallel(struct tablo *a){
     }
 
     for(int i = (int) log2(a->size)+1; i >= 0; i--){
-      if(pow(2,i) < a->size && (array_indice+pow(2,i)-1) <a->size){
-          struct tablo *tmp_tablo = prefix(subset(a,array_indice,array_indice + pow(2,i) - 1));
+      int current_pow = pow(2,i);
+      if(current_pow < a->size && (array_indice+current_pow-1) <a->size){
+          //printf("current_pow %i\n", current_pow);
+          struct tablo *tmp_tablo = prefix(subset(a,array_indice,array_indice + current_pow - 1));
           k[k_indice] = tmp_tablo->tab[tmp_tablo->size - 1];
 
           if(k_indice > 0){
-              for(int j = 0; j < tmp_tablo->size; j++){
-                  tmp_tablo->tab[j] = tmp_tablo->tab[j] + k[k_indice - 1];
+              for(int l=1; l<k_indice+1; l++){
+                  for(int j = 0; j < tmp_tablo->size; j++){
+                      tmp_tablo->tab[j] = tmp_tablo->tab[j] + k[l - 1];
+                  }
               }
               result = merge(result,tmp_tablo);
           }
@@ -166,7 +168,7 @@ struct tablo * prefix_parallel(struct tablo *a){
               result = tmp_tablo;
           }
           k_indice++;
-          array_indice+= pow(2,i);
+          array_indice+= current_pow;
       }
     }
     return result;
