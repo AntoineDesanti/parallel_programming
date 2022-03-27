@@ -78,8 +78,8 @@ int main(int argc, char **argv)
 	radix_sort(&tab_to_sort,n_value);
     timespec_get(&stop, TIME_UTC);
 
-	uint64_t elapsed_time = (SEC_TO_US((uint64_t)stop.tv_sec) + NS_TO_US((uint64_t)stop.tv_nsec)) 
-	- (SEC_TO_US((uint64_t)start.tv_sec) + NS_TO_US((uint64_t)start.tv_nsec));
+	int64_t elapsed_time = (SEC_TO_US((int64_t)stop.tv_sec) + NS_TO_US((int64_t)stop.tv_nsec)) 
+	- (SEC_TO_US((int64_t)start.tv_sec) + NS_TO_US((int64_t)start.tv_nsec));
 
 	printf("Time_in_microsec= %lu\n", elapsed_time);
 	//print elapsed time in micro seconds

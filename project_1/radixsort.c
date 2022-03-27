@@ -155,7 +155,7 @@ tablo *not(tablo *tab){
 	tmp->size = bit->size;
 	tmp->tab = malloc(bit->size * sizeof(int));
 
-	//#pragma omp parallel for
+	#pragma omp parallel for
     for (int i = 0; i < bit->size; ++i){
 		if(bit->tab[i]){
 			tmp->tab[i] = lup->tab[i];
