@@ -13,6 +13,8 @@ typedef struct tablo {
 
 typedef struct tablo tablo;
 
+struct tablo * prefix_parallel(struct tablo *a);
 struct tablo * prefix(struct tablo *a);
 struct tablo* montee(struct tablo* tab);
 struct tablo* descente(struct tablo* input);
+struct tablo *merge(struct tablo *tab1, struct tablo *tab2);
