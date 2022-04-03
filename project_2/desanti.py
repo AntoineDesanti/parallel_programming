@@ -9,7 +9,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("--tx", type=int, default=16)
 parser.add_argument("--ty", type=int, default=8)
 parser.add_argument("--gsize", type=int, default=7)
-parser.add_argument("--gsigma", type=int, default=100)
+parser.add_argument("--gsigma", type=int, default=15)
 parser.add_argument("input_file")
 parser.add_argument("output_file")
 args = parser.parse_args()
@@ -19,48 +19,54 @@ gaussia_kernel = np.array([[1,4,6,4,1],[4,16,24,16,4],[6,24,36,24,6],[4,16,24,16
 
 @cuda.jit
 def blur_kernel(input,output,kernel): 
-    
     x, y = cuda.grid(2)
-    # final_value = np.zeros([ 0, 0, 0])
-
     if x < input.shape[0] and y < input.shape[1]:
-        kernel_size = kernel.shape[0]
+        r = 0
+        g = 0
+        b = 0
 
-        r = np.uint8(0)
-        g = np.uint8(0)
-        b = np.uint8(0)
+        k_offset = kernel.shape[0] // 2
+        
+        for col in range(-k_offset, k_offset + 1):
+            for row in range(-k_offset, k_offset + 1):
+                pixel_x = x + col
+                pixel_y = y + row
+                if pixel_x < 0 or pixel_x >= input.shape[0] or pixel_y < 0 or pixel_y >= input.shape[1]:
+                    u, v = x, y
+                r += input[pixel_x, pixel_y, 0] * kernel[col + k_offset, row + k_offset]
+                g += input[pixel_x, pixel_y, 1] * kernel[col + k_offset, row + k_offset]
+                b += input[pixel_x, pixel_y, 2] * kernel[col + k_offset, row + k_offset]
+        output[x, y, 0] = r
+        output[x, y, 1] = g
+        output[x, y, 2] = b
 
-        top_left_x = x-2
-        top_left_y = y-2
 
-        for row in range(0,kernel_size):
-            for column in range(0,kernel_size):
-                r += input[top_left_x+row][top_left_y+column][0] * gaussia_kernel[row][column]
-                g += input[top_left_x+row][top_left_y+column][1] * gaussia_kernel[row][column]
-                b += input[top_left_x+row][top_left_y+column][2] * gaussia_kernel[row][column]
 
-        r = r // 256
-        g = g //256
-        b = b //256
+def compute_kernel():
+    center=(int)(args.gsize/2)
+    kernel=np.zeros((args.gsize,args.gsize))
+    for i in range(args.gsize):
+       for j in range(args.gsize):
+          diff=np.sqrt((i-center)**2+(j-center)**2)
+          kernel[i,j]=np.exp(-(diff**2)/(2*args.gsigma**2))
+    return kernel/np.sum(kernel)
 
-        output[x,y,0] = r
-        output[x,y,1] = g
-        output[x,y,2] = b
+# if not args.gsize
+#    custom_kernel = gaussia_kernel
 
-im = img.open("tigre_low.jpg")
+custom_kernel = compute_kernel()
+# print(custom_kernel)
+im = img.open(args.input_file)
 im_array = np.array(im)
 im_array = np.ascontiguousarray(im_array.transpose(1,0,2))
 
-if args.gsize or args.gsigma:
-    #test
-    print()
-    
+
 cuda_im_array = cuda.to_device(im_array)
 cuda_array_output = cuda.device_array(im_array.shape,dtype = np.uint8)
 
-x_dim = math.ceil(im_array.shape[0]/16) #replace 16 per tx value
-y_dim = math.ceil(im_array.shape[1]/8) #replace 16 per ty value
-blur_kernel[(x_dim,y_dim,1),(16,8,3)](cuda_im_array,cuda_array_output, cuda.to_device(gaussia_kernel))
+x_dim = math.ceil(im_array.shape[0]/args.tx) #replace 16 per tx value
+y_dim = math.ceil(im_array.shape[1]/args.ty) #replace 16 per ty value
+blur_kernel[(x_dim,y_dim,1),(16,8,3)](cuda_im_array,cuda_array_output, cuda.to_device(custom_kernel))
 
 #Result
 im_arrayResult = cuda_array_output.copy_to_host()
